@@ -63,7 +63,7 @@ public class Librarian {
         System.out.println("Enter 1 to add a new patron manually");
         System.out.println("Enter 2 to add patrons by file upload");
         System.out.println("Enter 3 to remove a patron");
-        System.out.println("Enter 4 to View all patrons");
+        System.out.println("Enter 4 to view all patrons");
         System.out.println("Enter 5 to exit the application");
     }
 
@@ -307,7 +307,7 @@ public class Librarian {
         }
     }
 
-    //Method to get a valid patron Id to delete.
+    //Method to get a valid patron ID to delete.
     private static int getPatronIdDelete(Scanner scanner) {
         while (true) {
             System.out.print("Enter patron ID to remove (7 digits, or type 'b' to return): ");
