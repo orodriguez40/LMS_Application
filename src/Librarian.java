@@ -19,6 +19,7 @@ public class Librarian {
 
     // Main Method
     public static void main(String[] args) {
+        //Scanner user to accept all user input.
         Scanner scanner = new Scanner(System.in);
         int userChoice;
 
@@ -75,6 +76,7 @@ public class Librarian {
                 scanner.nextLine();
                 if (choice >= 1 && choice <= 5)
                     return choice;
+
                 //If incorrect values are entered, it will be displayed for the user to try again.
                 System.out.println("Invalid input. Please select a number between 1 and 5.");
             } catch (InputMismatchException e) {
@@ -84,9 +86,24 @@ public class Librarian {
         }
     }
 
-    // Method to add a patron manually
+    //Method to add a patron manually
     private static void addPatronManual(Scanner scanner) {
+        do {
+            System.out.println("Please enter the following patron information:\n");
 
+            //Attributes will store called method values by first checking if input is correct.
+            int id = getUniquePatronId(scanner);
+            String name = getNonEmptyInput(scanner, "Name: ");
+            String address = getNonEmptyInput(scanner, "Address: ");
+            double amountOwed = getValidatedAmount(scanner);
+
+            //When correct values are entered, the patron will be added.
+            patrons.add(new Patron(id, name, address, amountOwed));
+            System.out.println("Patron successfully added!");
+
+            //method will loop until user selects to return to the main menu.
+            //getConfirmation() method will confirm users choice.
+        } while (getConfirmation(scanner, "Would you like to add another patron? Enter y or n"));
     }
 
     // Get a unique patron ID
