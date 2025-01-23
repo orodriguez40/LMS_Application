@@ -54,7 +54,12 @@ class Patron {
         this.amountOwed = amountOwed;
     }
 
-
+    //toString method is overwritten to display patron information.
+    @Override
+    public String toString() {
+        return "\nID: " + id + "\nName: " + name + "\nAddress: " + address + "\nAmount Owed: " + amountOwed;
+    }
 }
+
 
 
