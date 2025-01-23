@@ -61,10 +61,10 @@ public class Librarian {
         System.out.println("Main Menu");
         System.out.println("Please select from the following options:\n");
         System.out.println("Enter 1 to add a new patron manually");
-        System.out.println("Enter 2 to add patrons by upload");
+        System.out.println("Enter 2 to add patrons by file upload");
         System.out.println("Enter 3 to remove a patron");
         System.out.println("Enter 4 to View all patrons");
-        System.out.println("Enter 5 the application");
+        System.out.println("Enter 5 to exit the application");
     }
 
     //Method checks for user's choice in the main menu.
@@ -93,7 +93,7 @@ public class Librarian {
 
             //Local attributes will store called method values by
             //checking if input is correct first.
-            int id = getPatronId(scanner);
+            int id = getPatronIdManual(scanner);
             String name = getStringInput(scanner, "Name: ");
             String address = getStringInput(scanner, "Address: ");
             double amountOwed = getAmount(scanner);
@@ -108,7 +108,7 @@ public class Librarian {
     }
 
     //Method will ask user to input ID to be added manually.
-    public static int getPatronId(Scanner scanner) {
+    public static int getPatronIdManual(Scanner scanner) {
         //Local attribute used to check specified conditions are met.
         int id;
 
@@ -288,20 +288,61 @@ public class Librarian {
     }
 
 
-    // Method to delete a patron
+    //Method is to delete a patron
     private static void removePatron(Scanner scanner) {
+        while (true) {
+            int id = getPatronIdDelete(scanner);
+            Patron patron = findPatronById(id);
 
+            if (patron != null) {
+                patrons.remove(patron);
+                System.out.println("Patron removed successfully.");
+                return;
+            } else {
+                System.out.println("Patron not found in the system.");
+                if (!getConfirmation(scanner, "Would you like to try again? (y/n): ")) {
+                    return;
+                }
+            }
+        }
     }
 
-    // Get a valid patron ID
-    private static int getValidPatronId(Scanner scanner) {
+    //Method to get a valid patron Id to delete.
+    private static int getPatronIdDelete(Scanner scanner) {
+        while (true) {
+            System.out.print("Enter patron ID to remove (7 digits, or type 'b' to return): ");
+            String input = scanner.nextLine().trim().toLowerCase();
 
+            if (input.equals("b")) {
+                System.out.println("Returning to the main menu");
+                return -1; // Signal to return
+            }
+
+            try {
+                int id = Integer.parseInt(input);
+                if (id >= 1 && id <= 9999999) {
+                    return id;
+                } else {
+                    System.out.println("Invalid ID. It must be exactly 7 digits.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid 7-digit number.");
+            }
+        }
     }
 
-    // Method to view all patrons
+
+    //Method to find a patron by ID
+    private static Patron findPatronById(int id) {
+        return patrons.stream().filter(patron -> patron.getId() == id).findFirst().orElse(null);
+    }
+
+    //Method to view all patrons
     private static void viewAllPatrons() {
-
+        if (patrons.isEmpty()) {
+            System.out.println("The application does not have any patrons.");
+        } else {
+            patrons.forEach(System.out::println);
+        }
     }
-
-
 }
