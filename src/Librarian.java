@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 
 public class Librarian {
 
-    // Attribute: List to store all patrons
+    //Attribute to list to store all patrons.
     private static final List<Patron> patrons = new ArrayList<>();
 
     // Main Method
     public static void main(String[] args) {
-        //Scanner user to accept all user input.
+        //Scanner is used to accept all user input.
         Scanner scanner = new Scanner(System.in);
         int userChoice;
 
@@ -57,7 +57,7 @@ public class Librarian {
     }
 
     //User will the following menu when entering application.
-    private static void viewMenu() {
+    public static void viewMenu() {
         System.out.println("Main Menu");
         System.out.println("Please select from the following options:\n");
         System.out.println("Enter 1 to add a new patron manually");
@@ -68,7 +68,7 @@ public class Librarian {
     }
 
     //Method checks for user's choice in the main menu.
-    private static int getUserChoice(Scanner scanner) {
+    public static int getUserChoice(Scanner scanner) {
         while (true) {
             try {
                 //Attribute will be sent to viewMenu() method if correct input is entered.
@@ -87,15 +87,16 @@ public class Librarian {
     }
 
     //Method to add a patron manually
-    private static void addPatronManual(Scanner scanner) {
+    public static void addPatronManual(Scanner scanner) {
         do {
             System.out.println("Please enter the following patron information:\n");
 
-            //Attributes will store called method values by first checking if input is correct.
-            int id = getUniquePatronId(scanner);
-            String name = getNonEmptyInput(scanner, "Name: ");
-            String address = getNonEmptyInput(scanner, "Address: ");
-            double amountOwed = getValidatedAmount(scanner);
+            //Local attributes will store called method values by
+            //checking if input is correct first.
+            int id = getPatronId(scanner);
+            String name = getStringInput(scanner, "Name: ");
+            String address = getStringInput(scanner, "Address: ");
+            double amountOwed = getAmount(scanner);
 
             //When correct values are entered, the patron will be added.
             patrons.add(new Patron(id, name, address, amountOwed));
@@ -106,20 +107,66 @@ public class Librarian {
         } while (getConfirmation(scanner, "Would you like to add another patron? Enter y or n"));
     }
 
-    // Get a unique patron ID
-    private static int getUniquePatronId(Scanner scanner) {
+    //Method will as user input for ID.
+    public static int getPatronId(Scanner scanner) {
+        //Local attribute used to check specified conditions are met.
+        int id;
 
+        //Loop will iterate until user inputs 7 digits.
+        while (true) {
+            System.out.print("Enter ID: ");
+            String input = scanner.nextLine().trim();
+            if (input.matches("\\d{7}")) {
+                id = Integer.parseInt(input);
+
+                //Attribute and condition used to check if id not duplicated in the application.
+                int finalId = id;
+                if (patrons.stream().noneMatch(patron -> patron.getId() == finalId)) {
+                    return finalId;
+                } else {
+                    System.out.println("ID is already in the system. Please enter a different number.");
+                }
+            } else {
+                System.out.println("Invalid ID. It must be a 7-digit number. Please try again.");
+            }
+        }
     }
 
-    // Get non-empty input from user
-    private static String getNonEmptyInput(Scanner scanner, String prompt) {
-
+    //Method will ask for the user to input a String.
+    public static String getStringInput(Scanner scanner, String prompt) {
+        //Local attribute to check store a String value.
+        String input;
+        //Loop use to iterate and gather a String.
+        do {
+            System.out.print(prompt);
+            input = scanner.nextLine().trim();
+        } while (input.isEmpty());
+        return input;
     }
 
-    // Validate amount owed input
-    private static double getValidatedAmount(Scanner scanner) {
-
+    //Method will ask user for the amount owed.
+    private static double getAmount(Scanner scanner) {
+        //Local attribute to check store a double value.
+        double amountOwed;
+        //Loop will iterate until correct value is entered.
+        while (true) {
+            //Checks if amount is correct and returns it.
+            System.out.print("Amount Owed (0 - 250): ");
+            if (scanner.hasNextDouble()) {
+                amountOwed = scanner.nextDouble();
+                scanner.nextLine(); //Clears the line.
+                if (amountOwed >= 0 && amountOwed <= 250) {
+                    return amountOwed;
+                } else {
+                    System.out.print("Invalid amount. Number must be between 0 and 250: ");
+                }
+            } else {
+                System.out.print("Invalid input. Please enter a valid number: ");
+                scanner.nextLine(); //Clears invalid input.
+            }
+        }
     }
+
 
     // Get confirmation from user
     private static boolean getConfirmation(Scanner scanner, String message) {
