@@ -107,7 +107,7 @@ public class Librarian {
         } while (getConfirmation(scanner, "Would you like to add another patron? Enter y or n"));
     }
 
-    //Method will as user input for ID.
+    //Method will ask user to input ID to be added manually.
     public static int getPatronId(Scanner scanner) {
         //Local attribute used to check specified conditions are met.
         int id;
@@ -168,15 +168,125 @@ public class Librarian {
     }
 
 
-    // Get confirmation from user
+    //Method user to get yes or no confirmation.
     private static boolean getConfirmation(Scanner scanner, String message) {
-
+        System.out.print(message);
+        String choice = scanner.nextLine().trim().toLowerCase();
+        return choice.equals("y") || choice.equals("yes");
     }
 
-    // Method to add patrons from a file
+    //Method asks the user to upload file
     private static void addPatronFile(Scanner scanner) {
+        //User will be asked to enter directory for the .txt file upload.
+        System.out.print("Enter the file path for the patron list: ");
+        String filePath = scanner.nextLine().trim();
 
+        //BufferedReader will try to read the file.
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            //Attributes used to check for duplicate ids and file format.
+            List<String> duplicateIDs = new ArrayList<>();
+            List<String> invalidEntries = new ArrayList<>();
+            List<String> invalidIDs = new ArrayList<>();
+            List<String> outOfRangeAmountOwed = new ArrayList<>();
+            Set<Integer> existingIDs = patrons.stream().map(patron -> Integer.valueOf(patron.getId())).collect(Collectors.toSet());
+            Map<Integer, Integer> fileIDCounts = new HashMap<>();
+            List<Patron> validPatrons = new ArrayList<>();
+            boolean hasErrors = false;
+
+            //Attribute to parse file.
+            String line;
+            //Loop to iterate to parse and read all values within file.
+            while ((line = reader.readLine()) != null) {
+                //While reading the file, it will parse patron attribute values by hyphen.
+                String[] details = line.split("-");
+                if (details.length != 4) {
+                    invalidEntries.add(line);
+                    hasErrors = true;
+                    continue;
+                }
+
+                //Checks if IDs are within specified range.
+                try {
+                    //Local attributes used to check values.
+                    int id = Integer.parseInt(details[0].trim());
+                    fileIDCounts.put(id, fileIDCounts.getOrDefault(id, 0) + 1);
+
+                    //Condition statement to check if id within file is in the specified range.
+                    if (id < 1 || id > 9999999) {
+                        invalidIDs.add(line);
+                        hasErrors = true;
+                        continue;
+                    }
+                    //Condition statement to check there are duplicate values within file.
+                    if (existingIDs.contains(id)) {
+                        duplicateIDs.add(line);
+                        hasErrors = true;
+                        continue;
+                    }
+                    //Local attributes to store parsed values.
+                    String name = details[1].trim();
+                    String address = details[2].trim();
+
+                    //Checks if amount owed is out of specified range.
+                    double amountOwed = Double.parseDouble(details[3].trim());
+                    if (amountOwed < 0 || amountOwed > 250) {
+                        outOfRangeAmountOwed.add(line);
+                        hasErrors = true;
+                        continue;
+                    }
+
+                    //Patron is added once all information is validated.
+                    validPatrons.add(new Patron(id, name, address, amountOwed));
+                } catch (NumberFormatException e) {
+                    invalidEntries.add(line);
+                    hasErrors = true;
+                }
+            }
+
+            //Loop checks if id is already in the application.
+            for (Map.Entry<Integer, Integer> entry : fileIDCounts.entrySet()) {
+                if (entry.getValue() > 1) {
+                    int duplicateID = entry.getKey();
+                    duplicateIDs.addAll(
+                            validPatrons.stream().filter(p -> p.getId() == duplicateID).map(Patron::toString).collect(Collectors.toList())
+                    );
+                    validPatrons.removeIf(p -> p.getId() == duplicateID);
+                }
+            }
+
+            //Once it finished iterating through the file, it will add all patrons who satisfy all conditions.
+            patrons.addAll(validPatrons);
+
+            //Message displayed if there are IDs within the file or in the application.
+            if (!duplicateIDs.isEmpty()) {
+                System.out.println("\nThe following entries have duplicate IDs and were skipped:");
+                duplicateIDs.forEach(System.out::println);
+            }
+
+            //Message displayed if any ID is incorrectly formatted.
+            if (!invalidIDs.isEmpty()) {
+                System.out.println("\nThe following entries have invalid IDs (must be exactly 7 digits) and were skipped:");
+                invalidIDs.forEach(System.out::println);
+            }
+
+            //Message is displayed if amount owed is invalid.
+            if (!outOfRangeAmountOwed.isEmpty()) {
+                System.out.println("\nThe following entries have invalid amounts owed (must be between $0 and $250) and were skipped:");
+                outOfRangeAmountOwed.forEach(System.out::println);
+            }
+
+            //Message will display if any of the conditions mentioned above equals to true.
+            if (hasErrors) {
+                System.out.println("\nFile processing completed with errors.");
+            } else {
+                // Message will display if file uploaded successfully with no errors.
+                System.out.println("\nFile processing completed with no errors.");
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading the file. Please ensure the file path is correct.");
+        }
     }
+
 
     // Method to delete a patron
     private static void removePatron(Scanner scanner) {
@@ -194,3 +304,4 @@ public class Librarian {
     }
 
 
+}
