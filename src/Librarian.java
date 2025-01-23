@@ -24,32 +24,64 @@ public class Librarian {
 
         System.out.println("\nWelcome to the Library Management System (LMS)!\n");
 
-        // Main menu loop
+        // Main menu will iterate until the users chooses to close the application.
         do {
-            displayMenu();
+            viewMenu();
+            //Calls method to verify user input.
             userChoice = getUserChoice(scanner);
 
             switch (userChoice) {
-                case 1 -> addPatronManual(scanner);
-                case 2 -> addPatronFile(scanner);
-                case 3 -> removePatron(scanner);
-                case 4 -> viewAllPatrons();
-                case 5 -> System.out.println("Thank you for using the LMS application. Goodbye!");
-                default -> System.out.println("Invalid option. Please enter a number from 1 to 6.");
+                case 1:
+                    addPatronManual(scanner);
+                    break;
+                case 2:
+                    addPatronFile(scanner);
+                    break;
+                case 3:
+                    removePatron(scanner);
+                    break;
+                case 4:
+                    viewAllPatrons();
+                    break;
+                case 5:
+                    System.out.println("Thank you for using the LMS application. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid option. Please enter a number from 1 to 6.");
+                    break;
             }
         } while (userChoice != 6);
 
         scanner.close();
     }
 
-    // Display the main menu
-    private static void displayMenu() {
-
+    //User will the following menu when entering application.
+    private static void viewMenu() {
+        System.out.println("Main Menu");
+        System.out.println("Please select from the following options:\n");
+        System.out.println("Enter 1 to add a new patron manually");
+        System.out.println("Enter 2 to add patrons by upload");
+        System.out.println("Enter 3 to remove a patron");
+        System.out.println("Enter 4 to View all patrons");
+        System.out.println("Enter 5 the application");
     }
 
-    // Get user choice within a valid range
+    //Method checks for user's choice in the main menu.
     private static int getUserChoice(Scanner scanner) {
-
+        while (true) {
+            try {
+                //Attribute will be sent to viewMenu() method if correct input is entered.
+                int choice = scanner.nextInt();
+                scanner.nextLine();
+                if (choice >= 1 && choice <= 5)
+                    return choice;
+                //If incorrect values are entered, it will be displayed for the user to try again.
+                System.out.println("Invalid input. Please select a number between 1 and 5.");
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine(); // Clear the invalid input
+            }
+        }
     }
 
     // Method to add a patron manually
