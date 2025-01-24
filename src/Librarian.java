@@ -2,8 +2,7 @@
 // This is where the application will run.
 // The user will open the JAR file through the CLI.
 // They will have options to add a patron manually or by file,
-// remove a patron based on their ID,
-// view all patrons, or close the application.
+// remove a patron based on their ID, view all patrons, or close the application.
 
 // Imported Libraries
 
