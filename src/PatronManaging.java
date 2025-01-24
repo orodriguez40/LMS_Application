@@ -36,7 +36,7 @@ public class PatronManaging {
 
         // Create FileHandler instance to process the file
         FileHandling fileHandling = new FileHandling();
-        fileHandling.addPatronsFromFile(filePath, patrons); // Add patrons from the file
+        fileHandling.addPatronsByFile(filePath, patrons); // Add patrons from the file
     }
 
     // Method to remove a patron

@@ -4,8 +4,6 @@
 // They will have options to add a patron manually or by file,
 // remove a patron based on their ID, view all patrons, or close the application.
 
-// Imported Libraries
-
 // Create instances of PatronManager and UserInputHandler
 private static final PatronManaging patronManaging = new PatronManaging();
 private static final UserHandling userHandling = new UserHandling();

@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class FileHandling {
     // Method asks the user to upload a file and add patrons from it
-    public void addPatronsFromFile(String filePath, List<Patron> patrons) {
+    public void addPatronsByFile(String filePath, List<Patron> patrons) {
         // BufferedReader will try to read the file
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             // Lists to track errors and duplicates
