@@ -1,3 +1,7 @@
+// Otoniel Rodriguez-Perez
+// CEN-3024C-24204
+// 01/26/2024
+
 //Patron Class:
 // Used to define what a kind of information a patron will contain.
 //It will be called by the PatronManaging class to store, view, or remove patrons.
