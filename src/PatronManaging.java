@@ -1,6 +1,6 @@
 // Otoniel Rodriguez-Perez
 // CEN-3024C-24204
-// 01/26/2024
+// 01/26/2025
 
 // PatronManaging Class:
 // This class manages all functions related to patrons.
@@ -33,7 +33,7 @@ public class PatronManaging {
         } while (userConfirmation(scanner, "Would you like to add another patron? y or n\n"));
     }
 
-    // Method is called to add patrons by file upload
+    // Method is called to add patrons by file upload.
     public void addPatronFile(Scanner scanner) {
         // Prompt user for the file location.
         System.out.print("Enter the file path for the patron list:\n");
@@ -45,7 +45,7 @@ public class PatronManaging {
         fileUpload.addPatronsByFile(filePath, patrons); // Add patrons from the file
     }
 
-    // Method is called to remove a patron
+    // Method is called to remove a patron.
     public void removePatron(Scanner scanner) {
         // Loop to allow user to remove multiple patrons.
         while (true) {
@@ -73,17 +73,25 @@ public class PatronManaging {
         }
     }
 
-
     // Method is called to view all patrons.
     public void viewAllPatrons() {
-        // Check if there are any patrons in the Arraylist.
+        // Check if there are any patrons in the ArrayList.
         if (patrons.isEmpty()) {
             System.out.println("No patrons found."); // Inform user if no patrons are present.
         } else {
-            patrons.forEach(System.out::println); // displays all patrons.
+            //Sorts by ID number.
+            patrons.sort(Comparator.comparing(Patron::getId));
+            // Iterate through each patron and format the output.
+            for (Patron patron : patrons) {
+                System.out.println("\nID: " + patron.getId() +
+                        "\nName: " + patron.getName() +
+                        "\nAddress: " + patron.getAddress() +
+                        "\nAmount Owed: " + patron.getAmountOwed());
+            }
         }
     }
 
+    // Method to get a patron ID from user input.
     // Method to get a patron ID from user input.
     private int manualIdInput(Scanner scanner) {
         int id; // Local variable to hold the patron ID.
@@ -92,7 +100,7 @@ public class PatronManaging {
         while (true) {
             System.out.print("Enter ID: ");
             String input = scanner.nextLine().trim();
-            if (input.matches("\\d{7}")) { // Check if the input is a 7-digit number.
+            if (input.matches("\\d{7}") && Integer.parseInt(input) >= 1000000) { // Check if the input is a 7-digit number and >= 1000000
                 id = Integer.parseInt(input);
 
                 // Checks if the ID is unique.
@@ -103,10 +111,11 @@ public class PatronManaging {
                     System.out.println("ID is already in use. Please enter a different number.");
                 }
             } else {
-                System.out.println("Invalid ID. It must be a 7-digit number. Please try again.");
+                System.out.println("Invalid ID. It must be a 7-digit number and must start with a 1. Please try again.");
             }
         }
     }
+
 
     // Method is called to get a string input from the user.
     private String StringInput(Scanner scanner, String prompt) {
@@ -174,7 +183,7 @@ public class PatronManaging {
             // Checks ID to be the specified range.
             try {
                 int id = Integer.parseInt(input);
-                if (id >= 1 && id <= 9999999) {
+                if (id >= 1000000 && id <= 9999999) {
                     return id; // Returns the valid ID.
                 } else {
                     System.out.println("Invalid ID. It must be exactly 7 digits.");

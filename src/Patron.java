@@ -1,12 +1,12 @@
 // Otoniel Rodriguez-Perez
 // CEN-3024C-24204
-// 01/26/2024
+// 01/26/2025
 
 //Patron Class:
 // Used to define what a kind of information a patron will contain.
 //It will be called by the PatronManaging class to store, view, or remove patrons.
 
-class Patron {
+public class Patron {
 
     //Attributes
     private int id;
@@ -39,7 +39,6 @@ class Patron {
         return amountOwed;
     }
 
-
     //Setters
     public void setId(int id) {
         this.id = id;
@@ -61,7 +60,7 @@ class Patron {
     //toString method is overwritten to display patron information.
     @Override
     public String toString() {
-        return "\nID: " + id + "\nName: " + name + "\nAddress: " + address + "\nAmount Owed: " + amountOwed;
+        return id + "-" + name + "-" + address + "-" + amountOwed + "\n";
     }
 }
 
