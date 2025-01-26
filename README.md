@@ -1,2 +1,21 @@
-This work forms the software development plan in order to illustrate the development of a new LMS (Learning Management Application) software. Through the development of this software, any library will have an easy way of managing patron information. This program will be able to create, delete, or show all patrons. It is directly inputted and saved inside the application. Users will be able to communicate with the applications by an ONS (On-screen) menu from the CLI (Command Line Interface). Users (librarians) will then be able to choose any of the following options: upload patron information with a text (.txt) file, enter individual patron data, delete a patron from the application, display all patrons, or quit the application.
-Please see SDLC Assignment part 2.docx for more information.
+# Learning Management System (LMS) Software Development Plan
+
+This project outlines the **Software Development Plan** for the creation of a new **Learning Management System (LMS)** software. The goal of this software is to provide libraries with an easy and efficient way to manage patron information.
+
+## Features
+Through the development of this software, libraries will gain the ability to:
+- **Create, delete, and display patron information.**
+- Store patron data directly within the application.
+- Interact with the application via an **On-Screen (ONS) Menu** in the **Command Line Interface (CLI).**
+
+### User Actions (Librarians)
+Librarians can perform the following actions:
+1. Upload patron information using a `.txt` file.
+2. Enter individual patron data manually.
+3. Delete a patron from the application.
+4. Display a list of all patrons.
+5. Quit the application.
+
+## Additional Information
+For more details, please refer to the document: **`SDLC Assignment Part 2.docx`**.
+
