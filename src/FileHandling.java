@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.Scanner;
 
 public class FileHandling {
     //Method is called to read and process file.
@@ -21,8 +22,10 @@ public class FileHandling {
             List<String> invalidEntries = new ArrayList<>();
             List<String> invalidIDs = new ArrayList<>();
             List<String> outOfRangeAmountOwed = new ArrayList<>();
-            Map<Integer, Integer> idCountMap = new HashMap<>(); // Track ID counts
+            Map<Integer, Integer> idCountMap = new HashMap<>(); // Tracks ID counts.
             List<Patron> validPatrons = new ArrayList<>();
+            //User will confirm if patrons are to be added to the main patrons ArrayList.
+            Scanner scanner = new Scanner(System.in);
 
             // Reads rows from the text file.
             String row;
@@ -78,44 +81,56 @@ public class FileHandling {
             // Filter valid patrons to remove any that are duplicates.
             validPatrons.removeIf(patron -> allDuplicates.contains(patron.getId()));
 
-            // Add valid patrons to the main patrons Arraylist.
-            patrons.addAll(validPatrons);
+            //Message is displayed if there is no valid patrons to add.
+            if (validPatrons.isEmpty()){
+                System.out.println("\nNo valid patrons found.");
+            }
+            // Displays all valid patron before being added.
+            if(!validPatrons.isEmpty()) {
+                System.out.println("\nPlease see below valid patron(s) to be uploaded to the application.\n");
+                validPatrons.forEach(System.out::println);
 
+                // User confirms if valid patrons are added.
+                if (UserHandling.userConfirmation(scanner, "Are you sure you want to add patron(s)? y or n: ")) {
+                    patrons.addAll(validPatrons);
+                    System.out.println("\nPatron(s) added."); // Add valid patron(s) to the main patrons Arraylist.
+                } else {
+                    System.out.println("\nPatron(s) not added."); // User selects not to add patron(s).
+                }
+            }
             // Display messages for any issues encountered.
             if (!allDuplicates.isEmpty()) {
-                System.out.println("\nThe following IDs are duplicated within the file or in the application and were skipped:");
-                for (Integer duplicateId : allDuplicates) {
-                    System.out.println("ID: " + duplicateId);
-                }
+                System.out.println("\nThe following IDs are duplicated within the file or in the LMS application and were skipped:\n");
+                allDuplicates.forEach(System.out::println);
             }
 
             // Checks if there are invalid IDs to display.
-            if (!invalidIDs.isEmpty() || !outOfRangeAmountOwed.isEmpty()) {
+            if (!invalidIDs.isEmpty() || !outOfRangeAmountOwed.isEmpty() || !invalidEntries.isEmpty()) {
                 if (!allDuplicates.isEmpty()) {
                     System.out.println();
                 }
 
                 if (!invalidIDs.isEmpty()) {
-                    System.out.println("The following entries have invalid IDs (must be exactly 7 digits and start with a 1)\nor incorrect formatting and were skipped:");
+                    System.out.println("\nThe following entries have invalid IDs (must be exactly 7 digits and start with a 1)\nor incorrect formatting and were skipped:\n");
                     invalidIDs.forEach(System.out::println);
                 }
 
                 if(!invalidEntries.isEmpty()){
-                    System.out.println("The following entries have incorrect formatting and were skipped:");
+                    System.out.println("\nThe following entries have incorrect formatting and were skipped:\n");
                     invalidEntries.forEach(System.out::println);
                 }
 
                 if (!outOfRangeAmountOwed.isEmpty()) {
-                    System.out.println("\nThe following entries have invalid amounts owed (must be between $0 and $250) and were skipped:");
+                    System.out.println("\nThe following entries have invalid amounts owed (must be between $0 and $250) and were skipped:\n");
                     outOfRangeAmountOwed.forEach(System.out::println);
                 }
             }
 
             // Final message is displayed whether any errors occurred or not.
-            System.out.println("\nFile processing complete.\n");
+            System.out.println("\nFile processing complete. Returning to the main menu.");
 
         } catch (IOException e) {
-            System.out.println("\nError reading the file. Please ensure the file path is correct.");
+            System.out.println("\nError reading the file. Please ensure the file path is correct.\nReturning to the main menu.\n");
         }
     }
 }

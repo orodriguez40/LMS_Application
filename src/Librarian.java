@@ -31,6 +31,7 @@ public class Librarian {
             // Display the main menu options
             viewMenu();
             // Calls method to verify user input.
+            System.out.println("\nEnter choice:");
             userChoice = userHandling.usersChoice(scanner);
 
             // Switch statement to handle user choices.
@@ -61,7 +62,7 @@ public class Librarian {
 
     // Method is called display the main menu options.
     public static void viewMenu() {
-        System.out.println("Main Menu");
+        System.out.println("\nMain Menu");
         System.out.println("Please select from the following options:\n");
         System.out.println("Enter 1 to add a new patron manually");
         System.out.println("Enter 2 to add patrons by file upload");
